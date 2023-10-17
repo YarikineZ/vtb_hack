@@ -8,11 +8,15 @@ environment:
 
 dependencies:
   cupertino_icons: ^1.0.2
+  http: ^0.13.0
+  flutter_appauth_platform_interface: ^6.0.0
+
   flutter:
     sdk: flutter
-  flutter_appauth:
-    path: ../
-  http: ^0.13.0
+  url_launcher: ^6.1.14
+  openid_client: ^0.4.8
+
+
 
 dev_dependencies:
   flutter_test:
@@ -20,3 +24,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+
+
