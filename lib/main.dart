@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_appauth_example/pages/home_page.dart';
+import 'package:flutter_appauth_example/pages/welcome_page.dart';
+import 'package:get_it/get_it.dart';
 import 'package:openid_client/openid_client.dart';
 import 'openid_io.dart' if (dart.library.html) 'openid_browser.dart';
 
@@ -23,79 +26,94 @@ Future<Client> getClient() async {
 Future<void> main() async {
   client = await getClient();
   credential = await getRedirectResult(client, scopes: scopes);
-  runApp(const MyApp());
+
+  // final getIt = GetIt.instance;
+  // getIt.registerSingleton<UserInfo>(userInfo);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'openid_client demo',
-      home: MyHomePage(title: 'openid_client Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  UserInfo? userInfo;
-
-  @override
-  void initState() {
+    UserInfo? userInfo;
     if (credential != null) {
-      credential!.getUserInfo().then((userInfo) {
-        setState(() {
-          this.userInfo = userInfo;
-        });
+      credential!.getUserInfo().then((_userInfo) {
+        userInfo = _userInfo;
       });
     }
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            if (userInfo != null) ...[
-              Text('Hello ${userInfo!.name}'),
-              Text(userInfo!.email ?? ''),
-              OutlinedButton(
-                  child: const Text('Logout'),
-                  onPressed: () async {
-                    setState(() {
-                      userInfo = null;
-                    });
-                  })
-            ],
-            if (userInfo == null)
-              OutlinedButton(
-                  child: const Text('Login'),
-                  onPressed: () async {
-                    var credential = await authenticate(client, scopes: scopes);
-                    var userInfo = await credential.getUserInfo();
-                    setState(() {
-                      this.userInfo = userInfo;
-                    });
-                  }),
-          ],
-        ),
-      ),
+    return MaterialApp(
+      title: 'VTB Hack app',
+      // initialRoute: userInfo != null ? '/home' : '/welcome',
+      initialRoute: '/home',
+      routes: {
+        '/home': (context) => HomePage(),
+        '/welcome': (context) => const WelcomePage(),
+      },
     );
   }
 }
+
+// class MyHomePage extends StatefulWidget {
+//   const MyHomePage({super.key, required this.title});
+
+//   final String title;
+
+//   @override
+//   State<MyHomePage> createState() => _MyHomePageState();
+// }
+
+// class _MyHomePageState extends State<MyHomePage> {
+//   UserInfo? userInfo;
+
+//   @override
+//   void initState() {
+//     if (credential != null) {
+//       credential!.getUserInfo().then((userInfo) {
+//         setState(() {
+//           this.userInfo = userInfo;
+//         });
+//       });
+//     }
+//     super.initState();
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(widget.title),
+//       ),
+//       body: Center(
+//         child: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             if (userInfo != null) ...[
+//               Text('Hello ${userInfo!.name}'),
+//               Text(userInfo!.email ?? ''),
+//               OutlinedButton(
+//                   child: const Text('Logout'),
+//                   onPressed: () async {
+//                     setState(() {
+//                       userInfo = null;
+//                     });
+//                   })
+//             ],
+//             if (userInfo == null)
+//               OutlinedButton(
+//                   child: const Text('Login'),
+//                   onPressed: () async {
+//                     var credential = await authenticate(client, scopes: scopes);
+//                     var userInfo = await credential.getUserInfo();
+//                     setState(() {
+//                       this.userInfo = userInfo;
+//                     });
+//                   }),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }

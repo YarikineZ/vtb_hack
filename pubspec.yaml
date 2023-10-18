@@ -10,11 +10,13 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.0
   flutter_appauth_platform_interface: ^6.0.0
+  url_launcher: ^6.1.14
+  openid_client: ^0.4.8
+  get_it: ^7.6.4
 
   flutter:
     sdk: flutter
-  url_launcher: ^6.1.14
-  openid_client: ^0.4.8
+
 
 
 
@@ -24,6 +26,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
-
-
+  assets:
+    - assets/bank_logos/
+    - assets/favourite_logos/
